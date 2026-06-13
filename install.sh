@@ -6,13 +6,16 @@ here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 skills_dir="${OPENCLAW_SKILLS_DIR:-$HOME/.openclaw/skills}"
 dest="$skills_dir/skylight"
 
-echo "==> Installing the 'skylight' CLI (pyskylight)"
+# pyskylight is not on PyPI yet, so install from git by default. Override with
+# PYSKYLIGHT_PACKAGE=pyskylight once it is published.
+pkg="${PYSKYLIGHT_PACKAGE:-git+https://github.com/joshuaswarren/pyskylight}"
+echo "==> Installing the 'skylight' CLI ($pkg)"
 if command -v skylight >/dev/null 2>&1; then
   echo "    skylight already on PATH: $(command -v skylight)"
 elif command -v pipx >/dev/null 2>&1; then
-  pipx install pyskylight
+  pipx install "$pkg"
 elif command -v pip3 >/dev/null 2>&1; then
-  pip3 install --user pyskylight
+  pip3 install --user "$pkg"
 else
   echo "    WARNING: neither pipx nor pip3 found; install 'pyskylight' manually." >&2
 fi

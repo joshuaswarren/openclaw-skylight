@@ -17,7 +17,7 @@ Personal use, the household's own account only.
 The `skylight` CLI must be installed and credentials available in the environment:
 
 ```bash
-command -v skylight || pipx install pyskylight     # or: pip install --user pyskylight
+command -v skylight || pipx install git+https://github.com/joshuaswarren/pyskylight
 
 # Credentials — prefer 1Password references so secrets stay out of the environment:
 export SKYLIGHT_EMAIL="op://Shared/Skylight/username"
