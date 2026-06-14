@@ -1,6 +1,6 @@
 ---
 name: skylight
-description: Read and manage a Skylight Calendar / Buddy household via the `skylight` CLI — calendar events, family profiles, chores, lists, and especially Meals (recipes + the meal plan). Use when asked to view, add, or change anything on the Skylight, list/create recipes, or plan meals.
+description: Read and manage a Skylight Calendar / Buddy household via the `skylight` CLI — calendar events, family profiles/categories, chores, lists, Meals (recipes + meal plan), rewards, photos/albums, Buddy devices & alarms, household members, routines, and the AI Sidekick. Use when asked to view, add, or change anything on the Skylight.
 ---
 
 # Skylight
@@ -26,8 +26,12 @@ export SKYLIGHT_FRAME_ID="…"          # optional; avoids passing --frame each 
 export SKYLIGHT_TIMEZONE="America/Chicago"
 ```
 
-If a command returns `{"ok": false, "type": "SkylightPlusRequiredError", ...}`, the
-Meals/Recipes features need an active **Skylight Plus** subscription.
+If a command returns `{"ok": false, "type": "SkylightPlusRequiredError", ...}`, that
+endpoint needs an active **Skylight Plus** subscription (mostly the `/plus/*` status
+and a couple of AI features; Meals/rewards/albums generally work without it).
+
+The CLI covers nearly the whole private API (~145 commands). This skill shows the common
+flows; run `skylight --help` or `skylight <command> --help` to discover the rest.
 
 ## First run
 
@@ -50,25 +54,62 @@ skylight meal-categories                 # Breakfast/Lunch/Dinner ids
 skylight recipes                         # all recipes
 skylight recipe <recipe_id>
 skylight plan --from 2026-06-13 --to 2026-06-27   # planned meals (sittings)
-skylight lists
+skylight lists                                     # then: list-show <id>, list-items <id>
 skylight chores
+skylight rewards                                   # reward-points shows balances
+skylight devices                                   # then: alarms --device-id <id>  (Buddy alarms)
+skylight messages                                  # photos/messages; albums for albums
+skylight members                                   # household members
 ```
 
-## Writing (meals)
+## Writing — calendar
 
 ```bash
-# Create a recipe (returns the new recipe object incl. its id):
-skylight create-recipe --summary "Sheet-pan chicken" --description "Weeknight staple" --meal-category-id <id>
-
-# Plan a meal on a date (a "sitting" links a date + meal category + optional recipe):
-skylight plan-add --date 2026-06-20 --meal-category-id <dinner_id> --recipe-id <recipe_id>
-
-# Remove a recipe:
-skylight delete-recipe <recipe_id>
+skylight event-add --summary "Soccer" --starts-at 2026-06-21T17:00:00 --ends-at 2026-06-21T18:00:00 --tz America/Chicago --category-id <id>
+skylight event-update <event_id> --summary "Soccer Practice"
+skylight event-delete <event_id>
+skylight webcal-add --sync-url "webcal://…"         # subscribe an ICS feed
+skylight calendar-link --redirect-url … --failure-redirect-url …   # OAuth URL to connect Google
 ```
 
-Calendar events can also be created/edited via the library; the CLI exposes reads
-(`events`) plus meal writes. For richer calendar mutation use `pyskylight` directly.
+## Writing — meals
+
+```bash
+# Create / update / delete a recipe:
+skylight create-recipe --summary "Sheet-pan chicken" --description "Weeknight staple" --meal-category-id <id>
+skylight update-recipe <recipe_id> --description "…"
+skylight delete-recipe <recipe_id>
+skylight grocery-add <recipe_id>                   # push its ingredients to the grocery list
+
+# Plan a meal (a "sitting" links a date + meal category + optional recipe):
+skylight plan-add --date 2026-06-20 --meal-category-id <dinner_id> --recipe-id <recipe_id>
+skylight plan-update <sitting_id> --recipe-id <recipe_id>
+skylight plan-remove <sitting_id> --date 2026-06-20   # removes the instance on that date
+```
+
+## Writing — chores, lists, categories, rewards
+
+```bash
+skylight chore-add --summary "Take out trash" --category-id <profile_id> --reward-points 5
+skylight chore-complete <chore_id>                 # add --instance-date for a recurring one
+skylight list-create --label "Groceries" --kind shopping
+skylight list-add <list_id> --label "Milk"         # then list-item-complete <list_id> <item_id>
+skylight category-add --label "Anna" --color "#5DB671"
+skylight reward-add --name "Movie night" --point-value 50 --category-id <profile_id>
+skylight reward-redeem <reward_id>
+```
+
+## Devices, photos, AI
+
+```bash
+skylight alarms --device-id <id>                   # Buddy alarms; alarm-add/-update/-delete take --json
+skylight photo-upload --file ./pic.jpg --caption "Hi"
+skylight ai-intent-create --type meal_plan --json '{"prompt":"a week of easy dinners"}'
+```
+
+Some reverse-engineered write endpoints (device/alarm/member updates, source-calendar
+create/update, household config, AI prompts) take a `--json '{...}'` body; see
+`skylight <command> --help`. Account-level/billing actions are intentionally not exposed.
 
 ## Working pattern
 
