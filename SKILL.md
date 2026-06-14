@@ -104,7 +104,7 @@ skylight reward-redeem <reward_id>
 ```bash
 skylight alarms --device-id <id>                   # Buddy alarms; alarm-add/-update/-delete take --json
 skylight photo-upload --file ./pic.jpg --caption "Hi"
-skylight ai-intent-create --type meal_plan --json '{"prompt":"a week of easy dinners"}'
+skylight ai-intent-create --text "a week of easy dinners"   # Sidekick auto-creation
 ```
 
 Some reverse-engineered write endpoints (device/alarm/member updates, source-calendar
