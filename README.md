@@ -1,5 +1,12 @@
 # openclaw-skylight
 
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+![OpenClaw skill](https://img.shields.io/badge/OpenClaw-skill-7c3aed)
+
+> Part of a three-repo set: [`pyskylight`](https://github.com/joshuaswarren/pyskylight)
+> (client + CLI) · **openclaw-skylight** (this) ·
+> [`plantoeat-skylight-sync`](https://github.com/joshuaswarren/plantoeat-skylight-sync) (meal-plan sync).
+
 An [OpenClaw](https://openclaw.ai/) **skill** that lets your OpenClaw agents read and
 manage a [Skylight Calendar](https://www.skylightframe.com/) / Buddy household —
 calendar events, family chores/lists, and especially **Meals** (recipes + the meal
