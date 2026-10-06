@@ -1,5 +1,7 @@
 # openclaw-skylight
 
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink)](https://github.com/sponsors/joshuaswarren)
+
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![OpenClaw skill](https://img.shields.io/badge/OpenClaw-skill-7c3aed)
 
@@ -56,6 +58,14 @@ command surface.
 
 - [`pyskylight`](https://github.com/joshuaswarren/pyskylight) — the client + CLI this skill wraps.
 - [`plantoeat-skylight-sync`](https://github.com/joshuaswarren/plantoeat-skylight-sync) — scheduled Plan to Eat → Skylight meal-plan sync.
+
+## Support
+
+Every bit of support helps keep openclaw-skylight alive and free. If you are able, [sponsor on GitHub](https://github.com/sponsors/joshuaswarren) or send a Lightning donation to `joshuaswarren@strike.me` to directly fund continued development and new integrations.
+
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?style=for-the-badge)](https://github.com/sponsors/joshuaswarren)
+
+If financial support is not an option, you can still make a big difference: [star the repo](https://github.com/joshuaswarren/openclaw-skylight), share it, or recommend it to a colleague. Word of mouth is how most people find openclaw-skylight.
 
 ## License
 
